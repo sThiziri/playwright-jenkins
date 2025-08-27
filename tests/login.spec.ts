@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import LoginPage from '../pages/LoginPage';
 
 test('username correct et pass correct', {tag :['@tc-001','@regression']}, async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
+  await page.goto('https://www.saucedemo.com/', { waitUntil: 'domcontentloaded' });
   const loginPage:LoginPage= new LoginPage(page);
   await loginPage.saisirUsername('standard_user');
   await loginPage.saisirPassword('secret_sauce');
