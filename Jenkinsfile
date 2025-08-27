@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'mcr.microsoft.com/playwright:latest'
+            image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
             args '-u root'
         }
     }
@@ -9,7 +9,7 @@ pipeline {
         stage('Install') {
             steps {
                 sh 'npm ci'
-                sh 'npx playwright install' // installe les navigateurs correctement
+                sh 'npx playwright install' 
             }
         }
         stage('E2E Tests') {
