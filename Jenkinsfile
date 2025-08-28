@@ -33,9 +33,7 @@ pipeline {
                     sh 'chown -R 1000:1000 allure-results'
                     sh 'chmod -R 755 allure-results'
 
-                    sh 'chown -R 1000:1000 allure-report'
-                    sh 'chmod -R 755 allure-report'
-
+                    
                     // Stash les résultats pour le post
                     stash name: 'allure-results', includes: 'allure-results/**'
                 }
@@ -50,6 +48,9 @@ pipeline {
                         // Assurer que Java est disponible dans le post
                         sh 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64'
                         sh 'export PATH=$JAVA_HOME/bin:$PATH'
+
+                        sh 'chown -R 1000:1000 allure-report'
+                        sh 'chmod -R 755 allure-report'
 
                         // Générer le rapport Allure
                         sh 'allure generate allure-results -c -o allure-report'
