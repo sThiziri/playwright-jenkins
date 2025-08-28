@@ -33,6 +33,9 @@ pipeline {
                     sh 'chown -R 1000:1000 allure-results'
                     sh 'chmod -R 755 allure-results'
 
+                    sh 'chown -R 1000:1000 allure-report'
+                    sh 'chmod -R 755 allure-report'
+
                     // Stash les résultats pour le post
                     stash name: 'allure-results', includes: 'allure-results/**'
                 }
