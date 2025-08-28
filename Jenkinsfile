@@ -42,12 +42,6 @@ pipeline {
 
                         sh 'allure generate allure-results -c -o allure-report'
 
-                        allure([
-                            includeProperties: false,
-                            jdk: '',
-                            results: [[path: 'allure-results']]
-                        ])
-
                         archiveArtifacts artifacts: 'allure-report/**'
                     }
                 }
