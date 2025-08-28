@@ -21,7 +21,7 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
             junit 'playwright-report/results.xml' // Jenkins lit les résultats JUnit
         }
     }

@@ -4,8 +4,7 @@ import { PanierPage } from '../pages/PanierPage'
 test.describe('Tests Panier', () => {
   test('Ajouter des produits et vérifier le panier', async ({ page }) => {
     const panierPage = new PanierPage(page);
-
-    await page.goto('https://www.saucedemo.com/', { waitUntil: 'load' });
+    await page.goto('https://www.saucedemo.com/', { waitUntil: 'domcontentloaded', timeout: 80000 });
     await page.fill('[data-test="username"]', 'standard_user');
     await page.fill('[data-test="password"]', 'secret_sauce');
     await page.click('[data-test="login-button"]');
