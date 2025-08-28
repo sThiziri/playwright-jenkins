@@ -1,15 +1,18 @@
 pipeline {
-    agent {
-        docker {
-            image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
-            args '-u root'
-        }
-    }
+    agent any
     stages {
         stage('Install') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
+                    args '-u root'
+                }
+            }
             steps {
+                script{
                 sh 'npm ci'
                 sh 'npx playwright install' 
+                }
             }
         }
         stage('Install Allure') {
