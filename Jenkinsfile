@@ -15,10 +15,10 @@ pipeline {
                     sh 'npm ci'
                     sh 'npx playwright install'
 
-                    // Installer Java (nécessaire pour Allure)
+                    // Installer Java, unzip et wget
                     sh 'apt-get update && apt-get install -y default-jre unzip wget'
 
-                    // Définir JAVA_HOME pour la session en cours
+                    // Définir JAVA_HOME pour la session
                     env.JAVA_HOME = '/usr/lib/jvm/java-11-openjdk-amd64'
                     env.PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
 
@@ -50,7 +50,7 @@ pipeline {
                         // Unstash les résultats Allure
                         unstash 'allure-results'
 
-                        // Générer le rapport Allure dans un dossier temporaire
+                        // Générer le rapport Allure **hors du workspace Git** pour éviter les problèmes de permissions
                         sh '''
                             export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
                             export PATH=$JAVA_HOME/bin:$PATH
