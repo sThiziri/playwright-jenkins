@@ -20,7 +20,8 @@ pipeline {
                     sh 'ln -s /usr/local/allure-2.34.1/bin/allure /usr/bin/allure'
 
                     sh 'npx playwright test --reporter=line,allure-playwright'
-
+                    sh 'chown -R 1000:1000 allure-results'
+                    sh 'chmod -R 755 allure-results'
                     stash name: 'allure-results', includes: 'allure-results/**'
                 }
             }
