@@ -16,6 +16,12 @@ pipeline {
             }
         }
         stage('Install Allure') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
+                    args '-u root'
+                }
+            }
             steps {
                 sh 'apt-get update && apt-get install -y unzip wget'
                 sh 'wget https://repo1.maven.org/maven2/io/qameta/allure/allure-commandline/2.34.1/allure-commandline-2.34.1.zip -O allure.zip'
@@ -24,6 +30,12 @@ pipeline {
             }
         }
         stage('E2E Tests') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
+                    args '-u root'
+                }
+            }
             steps {
                 //sh 'npx playwright test --reporter=html'
                 sh 'npx playwright test --reporter=line,allure-playwright'
