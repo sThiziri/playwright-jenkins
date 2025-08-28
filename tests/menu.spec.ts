@@ -7,7 +7,7 @@ test.describe('@menu', () => {
   let menuPage: MenuPage;
 
   test.beforeEach(async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/', { waitUntil: 'domcontentloaded' });
+    await page.goto('https://www.saucedemo.com/', { waitUntil: 'load' });
     loginPage = new LoginPage(page);
     await loginPage.saisirUsername('standard_user');
     await loginPage.saisirPassword('secret_sauce');
