@@ -12,6 +12,7 @@ pipeline {
                 script{
                 sh 'npm ci'
                 sh 'npx playwright install' 
+                stash name: 'allure-results', includes: 'allure-results/*'
                 }
             }
         }
@@ -44,6 +45,7 @@ pipeline {
     }
     post {
         always {
+            unstash 'allure-results'
             sh 'allure generate allure-results -c -o allure-report'
             archiveArtifacts artifacts: 'allure-report/**'
             //junit 'playwright-report/results.xml' // Jenkins lit les résultats JUnit
