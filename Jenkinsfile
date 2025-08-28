@@ -15,14 +15,18 @@ pipeline {
         stage('E2E Tests') {
             steps {
                 //sh 'npx playwright test --reporter=html'
-                sh 'npx playwright test'
+                sh 'npx playwright test --reporter=line,allure-playwright'
             }
         }
     }
     post {
         always {
             archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
-            junit 'playwright-report/results.xml' // Jenkins lit les résultats JUnit
+            //junit 'playwright-report/results.xml' // Jenkins lit les résultats JUnit
+
+            allure([
+                results: [[path: 'allure-results']]
+            ])
         }
     }
 }

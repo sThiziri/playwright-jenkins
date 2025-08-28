@@ -3,11 +3,11 @@ import LoginPage from '../pages/LoginPage';
 import MenuPage from '../pages/MenuPage';
 
 test.describe('@menu', () => {
+  test.setTimeout(80000);
   let loginPage: LoginPage;
   let menuPage: MenuPage;
-
+  
   test.beforeEach(async ({ page }) => {
-    test.setTimeout(80000)
     await page.goto('https://www.saucedemo.com/', { waitUntil: 'domcontentloaded', timeout: 100000 });
     loginPage = new LoginPage(page);
     await loginPage.saisirUsername('standard_user');

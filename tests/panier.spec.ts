@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { PanierPage } from '../pages/PanierPage'
-
+test.setTimeout(80000);
 test.describe('Tests Panier', () => {
+  
   test('Ajouter des produits et vérifier le panier', async ({ page }) => {
     const panierPage = new PanierPage(page);
     await page.goto('https://www.saucedemo.com/', { waitUntil: 'domcontentloaded', timeout: 80000 });
