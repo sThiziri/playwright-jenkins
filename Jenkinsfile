@@ -6,7 +6,7 @@ pipeline {
             agent {
                 docker {
                     image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
-                    args '-u root' // root pour installer tout ce dont on a besoin
+                    args '-u root'
                 }
             }
             steps {
@@ -33,33 +33,39 @@ pipeline {
                     sh 'rm -rf allure-results'
 
                     // Lancer les tests avec le reporter Allure
-                    sh 'npx playwright test --reporter=line,allure-playwright'
+                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                        sh 'npx playwright test --reporter=line,allure-playwright'
+                    }
 
                     // Fixer les permissions pour Jenkins
                     sh 'chown -R 1000:1000 allure-results || true'
                     sh 'chmod -R 755 allure-results || true'
 
-                    // Stash les résultats pour le post
-                    stash name: 'allure-results', includes: 'allure-results/**'
+                    // Stash des résultats même si tests échouent
+                    stash name: 'allure-results', includes: 'allure-results/**', allowEmpty: true
                 }
             }
 
             post {
                 always {
                     script {
-                        // Unstash les résultats Allure
-                        unstash 'allure-results'
+                        try {
+                            // Unstash seulement si le stash existe
+                            unstash 'allure-results'
 
-                        // Générer le rapport Allure **hors du workspace Git** pour éviter les problèmes de permissions
-                        sh '''
-                            export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-                            export PATH=$JAVA_HOME/bin:$PATH
-                            rm -rf /tmp/allure-report
-                            allure generate allure-results -c -o /tmp/allure-report
-                        '''
+                            // Générer le rapport Allure hors du workspace Git
+                            sh '''
+                                export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+                                export PATH=$JAVA_HOME/bin:$PATH
+                                rm -rf /tmp/allure-report
+                                allure generate allure-results -c -o /tmp/allure-report
+                            '''
 
-                        // Archiver le rapport pour Jenkins
-                        archiveArtifacts artifacts: '/tmp/allure-report/**'
+                            // Archiver le rapport pour Jenkins
+                            archiveArtifacts artifacts: '/tmp/allure-report/**'
+                        } catch (e) {
+                            echo "Pas de résultats Allure à générer, skipping"
+                        }
                     }
                 }
             }
